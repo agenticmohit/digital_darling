@@ -1,12 +1,12 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
-    supabase_url: str
-    supabase_anon_key: str
-    supabase_jwt_secret: str
-    openai_api_key: str
-    razorpay_key_id: str
-    razorpay_key_secret: str
+    supabase_url: str = "https://xxxx.supabase.co"
+    supabase_anon_key: str = "placeholder"
+    supabase_jwt_secret: str = "placeholder-dev-secret-32-chars-min"
+    openai_api_key: str = "placeholder"
+    razorpay_key_id: str = ""
+    razorpay_key_secret: str = ""
     app_url: str = "http://localhost:8000"
     environment: str = "development"
 

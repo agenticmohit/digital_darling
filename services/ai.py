@@ -92,6 +92,48 @@ Return ONLY a valid JSON object. No markdown. No explanation. No preamble.
   }
 }"""
 
+# ── TODO: REMOVE THIS ENTIRE BLOCK BEFORE PRODUCTION ──────────────────────────
+# SANDBOX_MOCK — realistic fake output used when no real OpenAI key is set.
+# Demonstrates Hinglish capability. Search "SANDBOX_MOCK" to find all related code.
+_SANDBOX_MOCK_RESULT = {
+    "score": 58,
+    "label": "HOT & COLD",
+    "verdict": "keeping you warm on the back burner fr, not cold enough to ghost but not brave enough to actually show up.",
+    "what_they_want": "your attention on tap with zero effort on their end. easy validation, no commitment.",
+    "red_flags": [
+        "says 'definitely' and 'for sure' but never picks a day, time, or place lol",
+        "goes surface-level the second the convo gets real, deflects with haha's and maybe's",
+        "3-day silence then a casual 'hey' like nothing happened... classic reset move ngl",
+        "energy tanks the moment you try to move from texting to actually meeting up irl",
+    ],
+    "your_move": {
+        "bold": "ok genuine q are we actually hanging out or is this just a really long pen pal thing 😭",
+        "neutral": "haha no worries! lmk when life settles down a bit 😊",
+        "pull_back": "all good, ball's in your court whenever",
+    },
+}
+# ── TODO: REMOVE THIS ENTIRE BLOCK BEFORE PRODUCTION ──────────────────────────
+# SANDBOX_MOCK for screenshot extraction
+_SANDBOX_MOCK_SCREENSHOT = """Them: hey what you doing tonight
+You: nm why
+Them: was thinking we could hang
+You: maybe idk let me see
+Them: come on it'll be fun
+You: when were you thinking
+Them: like 9ish?
+You: that's kinda late
+Them: ok 8 then
+You: I'll let you know
+Them: ok cool
+You: 👍
+Them: you always do this lol
+You: do what
+Them: the idk ill let you know thing
+You: I'm just busy
+Them: sure lol
+You: what's that supposed to mean
+Them: nothing forget it"""
+# ── END SANDBOX BLOCK ──────────────────────────────────────────────────────────
 
 # Vision prompt for screenshot extraction
 _SCREENSHOT_EXTRACT_PROMPT = """Extract the conversation from this chat screenshot.
