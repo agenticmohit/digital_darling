@@ -1,0 +1,114 @@
+{% extends base_template %}
+
+{% block content %}
+<div class="pt-4 pb-10">
+
+  <div class="space-y-0.5 mb-5">
+    <h2 class="text-lg font-semibold" style="color:var(--text); letter-spacing:-0.3px;">Your reads</h2>
+    <p class="text-xs" style="color:var(--muted);">All your decoded conversations, newest first.</p>
+  </div>
+
+  {% if history and history|length > 0 %}
+    {% for item in history %}
+      <div class="card cursor-pointer select-none"
+           onclick="toggleHistory('hd-{{ loop.index0 }}')">
+
+        <!-- Row: snippet + date / label + score -->
+        <div class="flex items-center justify-between gap-3">
+          <div class="min-w-0 flex-1 space-y-1">
+            <p class="text-xs font-semibold truncate" style="color:var(--text);">
+              {{ item.chat_snippet }}
+            </p>
+            <span class="text-[10px]" style="color:var(--muted);">
+              {{ item.created_at[:10] if item.created_at else 'Just now' }}
+            </span>
+          </div>
+
+          <div class="flex items-center gap-2 flex-shrink-0">
+            <span class="text-[9px] font-bold tracking-wider uppercase px-2.5 py-1 rounded-full"
+                  style="background:rgba(200,39,78,0.12); color:rgba(255,180,200,0.95); border:1px solid rgba(200,39,78,0.22);">
+              {{ item.label }}
+            </span>
+            <span class="font-bold text-xl leading-none"
+                  style="background:linear-gradient(135deg,#C8274E,#A8146A);
+                         -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+                         background-clip:text; letter-spacing:-0.5px;">
+              {{ item.score }}
+            </span>
+          </div>
+        </div>
+
+        <!-- Expandable detail -->
+        <div id="hd-{{ loop.index0 }}"
+             class="hidden mt-4 pt-4 space-y-3"
+             style="border-top:1px solid var(--border);"
+             onclick="event.stopPropagation()">
+
+          <!-- Verdict -->
+          <p class="italic leading-relaxed"
+             style="font-family:'Cormorant Garamond',serif; font-size:17px; font-weight:300;
+                    color:var(--text);">
+            &ldquo;{{ item.result.verdict }}&rdquo;
+          </p>
+
+          <!-- True intent -->
+          <div class="rounded-2xl px-4 py-3"
+               style="background:rgba(255,255,255,0.04); border:1px solid var(--border);">
+            <span class="section-label">True intent</span>
+            <p class="text-xs leading-relaxed" style="color:var(--sub);">
+              {{ item.result.what_they_want }}
+            </p>
+          </div>
+
+          <!-- Red flags -->
+          <div>
+            <span class="section-label">Red flags</span>
+            <div style="border-top:1px solid var(--border);">
+              {% for flag in item.result.red_flags %}
+                <div class="py-2.5 flex items-start gap-2.5 text-xs leading-relaxed"
+                     style="border-bottom:1px solid var(--border); color:var(--sub);">
+                  <span style="color:var(--crimson); flex-shrink:0; line-height:1.4;">→</span>
+                  <span>{{ flag }}</span>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+
+      </div>
+    {% endfor %}
+
+  {% else %}
+    <!-- Empty state -->
+    <div class="card py-10 flex flex-col items-center text-center gap-4">
+      <div class="w-14 h-14 rounded-full flex items-center justify-center flex-shrink-0"
+           style="background:rgba(200,39,78,0.10); border:1px solid rgba(200,39,78,0.20); color:var(--crimson);">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="9"/>
+          <path d="M12 7v5l3 3"/>
+        </svg>
+      </div>
+      <div class="space-y-1">
+        <p class="text-sm font-semibold" style="color:var(--text);">No reads yet</p>
+        <p class="text-xs leading-relaxed max-w-[240px] mx-auto" style="color:var(--sub);">
+          Decode your first conversation to see the vibe, red flags, and replies here.
+        </p>
+      </div>
+      <a href="/decode" hx-get="/decode" hx-target="#page" hx-push-url="true"
+         class="btn-primary no-underline text-xs font-semibold py-3"
+         style="width:auto; padding-left:28px; padding-right:28px;">
+        Decode a chat
+      </a>
+    </div>
+  {% endif %}
+
+</div>
+
+<script>
+  function toggleHistory(id) {
+    const el = document.getElementById(id);
+    if (el) el.classList.toggle('hidden');
+  }
+</script>
+{% endblock %}

@@ -1,0 +1,28 @@
+# Virtual environment — never copy into image
+.venv/
+venv/
+
+# Secrets — Railway injects these as env vars, never bake into image
+.env
+.env.*
+
+# Python bytecode
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Dev tooling
+.idea/
+.vscode/
+.claude/
+.git/
+.gitignore
+
+# Docs & local notes
+*.md
+AGENTS.md
+
+# OS junk
+.DS_Store
+Thumbs.db

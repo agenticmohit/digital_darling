@@ -1,0 +1,262 @@
+{% extends base_template %}
+
+{% block content %}
+<div class="space-y-4 pt-4 pb-8">
+
+  <!-- Header -->
+  <div class="space-y-0.5">
+    <h2 class="text-lg font-semibold" style="color:var(--text); letter-spacing:-0.3px;">Read the vibe</h2>
+    <p class="text-xs" style="color:var(--muted);">Paste the chat or drop a screenshot. We do the rest.</p>
+  </div>
+
+  <!-- Reads left -->
+  <div class="flex items-center justify-between">
+    {% if plan == "paid" %}
+      <span class="text-[10px]" style="color:var(--muted);">Unlimited reads</span>
+    {% else %}
+      <span class="text-[10px]" style="color:var(--muted);">{{ reads_left }} of 3 reads left today</span>
+    {% endif %}
+    <span id="char-counter" class="text-[10px]" style="color:var(--muted);"></span>
+  </div>
+
+  <!-- Mode tabs -->
+  <div id="mode-tabs" class="flex gap-1.5 p-1 rounded-xl"
+       style="background:rgba(255,255,255,0.05); border:1px solid var(--border);">
+    <button type="button" id="tab-paste" onclick="setMode('paste')"
+            class="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-semibold transition-all select-none">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+      </svg>
+      Paste text
+    </button>
+    <button type="button" id="tab-screenshot" onclick="setMode('screenshot')"
+            class="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-semibold transition-all select-none">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/>
+        <circle cx="12" cy="13" r="4"/>
+      </svg>
+      Screenshot
+    </button>
+  </div>
+
+  <!-- Form — always multipart so file upload works -->
+  <form id="decode-form"
+        hx-post="/decode"
+        hx-target="#decode-result"
+        hx-swap="innerHTML"
+        hx-indicator="#decode-btn"
+        hx-encoding="multipart/form-data"
+        class="space-y-3">
+
+    <!-- ── Paste mode ────────────────────────────────────────────────────── -->
+    <div id="paste-mode">
+      <textarea id="chat-input"
+                name="chat"
+                rows="9"
+                placeholder="Him: hey what you up to&#10;Her: nm you?&#10;Him: just thinking about you lol&#10;Her: oh yeah?&#10;Him: yeah we should hang soon&#10;Her: maybe, idk&#10;..."
+                class="input-custom resize-none text-xs leading-relaxed"
+                style="min-height:190px;"
+                oninput="updateCharCount(this)"></textarea>
+    </div>
+
+    <!-- ── Screenshot mode (hidden by default) ───────────────────────────── -->
+    <div id="screenshot-mode" class="hidden">
+      <!-- Hidden real file input -->
+      <input type="file" id="screenshot-input" name="screenshot"
+             accept="image/jpeg,image/jpg,image/png,image/webp"
+             class="hidden" onchange="onFileSelected(this)">
+
+      <!-- Drop zone / tap area -->
+      <div id="drop-zone"
+           onclick="document.getElementById('screenshot-input').click()"
+           class="flex flex-col items-center justify-center gap-3 rounded-2xl cursor-pointer transition-all select-none"
+           style="min-height:190px; border:2px dashed rgba(200,39,78,0.30);
+                  background:rgba(200,39,78,0.04);">
+
+        <!-- Empty state -->
+        <div id="drop-empty" class="flex flex-col items-center gap-3 py-6 px-4 text-center">
+          <div style="width:48px; height:48px; border-radius:50%; display:flex; align-items:center;
+                      justify-content:center; background:rgba(200,39,78,0.10);
+                      border:1px solid rgba(200,39,78,0.22); color:var(--crimson);">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/>
+              <circle cx="12" cy="13" r="4"/>
+            </svg>
+          </div>
+          <div class="space-y-1">
+            <p class="text-sm font-semibold" style="color:var(--text);">Drop screenshot here</p>
+            <p class="text-xs" style="color:var(--muted);">or tap to pick from your gallery</p>
+          </div>
+          <p class="text-[10px] leading-relaxed max-w-[220px]" style="color:var(--muted);">
+            Works with WhatsApp, iMessage, Instagram DMs, Telegram. JPEG or PNG, max 4 MB.
+          </p>
+        </div>
+
+        <!-- Preview state (hidden until file picked) -->
+        <div id="drop-preview" class="hidden w-full p-3 flex flex-col items-center gap-2">
+          <img id="preview-img" src="" alt="screenshot preview"
+               class="rounded-xl object-cover w-full"
+               style="max-height:160px; object-fit:contain;">
+          <p id="preview-name" class="text-[10px]" style="color:var(--muted);">tap to change</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Submit -->
+    <button type="submit" id="decode-btn"
+            class="btn-primary w-full flex items-center justify-center gap-2 select-none relative overflow-hidden">
+      <svg id="btn-icon" width="15" height="15" viewBox="0 0 24 24" fill="none"
+           stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M2 12h2.5M19.5 12H22M5.5 12l1.8-4.5 3.2 9 3-9 2 4.5"/>
+      </svg>
+      <span class="btn-text">Read the vibe</span>
+      <span class="btn-loading hidden">Reading...</span>
+    </button>
+  </form>
+
+  <!-- Result target -->
+  <div id="decode-result" class="pt-1"></div>
+</div>
+
+<script>
+  // ── Tab state ──────────────────────────────────────────────────────────────
+  const TAB_ACTIVE   = 'background:rgba(200,39,78,0.14); color:rgba(255,180,200,0.95); border:1px solid rgba(200,39,78,0.25);';
+  const TAB_INACTIVE = 'background:transparent; color:var(--muted); border:1px solid transparent;';
+
+  function setMode(mode) {
+    const pasteEl   = document.getElementById('paste-mode');
+    const shotEl    = document.getElementById('screenshot-mode');
+    const tabPaste  = document.getElementById('tab-paste');
+    const tabShot   = document.getElementById('tab-screenshot');
+    const chatInput = document.getElementById('chat-input');
+    const fileInput = document.getElementById('screenshot-input');
+    const counter   = document.getElementById('char-counter');
+
+    if (mode === 'paste') {
+      pasteEl.classList.remove('hidden');
+      shotEl.classList.add('hidden');
+      tabPaste.setAttribute('style', TAB_ACTIVE);
+      tabShot.setAttribute('style', TAB_INACTIVE);
+      chatInput.required = true;
+      // clear file selection
+      fileInput.value = '';
+      resetDropZone();
+      updateCharCount(chatInput);
+    } else {
+      pasteEl.classList.add('hidden');
+      shotEl.classList.remove('hidden');
+      tabPaste.setAttribute('style', TAB_INACTIVE);
+      tabShot.setAttribute('style', TAB_ACTIVE);
+      chatInput.required = false;
+      chatInput.value = '';
+      counter.textContent = '';
+    }
+  }
+
+  // Set initial active tab style
+  document.getElementById('tab-paste').setAttribute('style', TAB_ACTIVE);
+  document.getElementById('tab-screenshot').setAttribute('style', TAB_INACTIVE);
+
+  // ── Char counter ───────────────────────────────────────────────────────────
+  function updateCharCount(textarea) {
+    const counter = document.getElementById('char-counter');
+    const len = textarea.value.length;
+    counter.textContent = len > 0 ? `${len} / 8000` : '';
+    counter.style.color = len > 8000 ? 'rgba(200,39,78,0.9)' : 'var(--muted)';
+  }
+
+  // ── File picker / drop zone ────────────────────────────────────────────────
+  function onFileSelected(input) {
+    if (!input.files || !input.files[0]) return;
+    const file = input.files[0];
+
+    if (file.size > 4 * 1024 * 1024) {
+      window.showToast && window.showToast('Image too large. Crop it under 4 MB.');
+      input.value = '';
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      document.getElementById('drop-empty').classList.add('hidden');
+      const preview = document.getElementById('drop-preview');
+      preview.classList.remove('hidden');
+      document.getElementById('preview-img').src = e.target.result;
+      document.getElementById('preview-name').textContent = file.name + ' · tap to change';
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function resetDropZone() {
+    document.getElementById('drop-empty').classList.remove('hidden');
+    document.getElementById('drop-preview').classList.add('hidden');
+    document.getElementById('preview-img').src = '';
+  }
+
+  // ── Drag-and-drop ─────────────────────────────────────────────────────────
+  const dropZone = document.getElementById('drop-zone');
+
+  dropZone.addEventListener('dragover', e => {
+    e.preventDefault();
+    dropZone.style.borderColor = 'rgba(200,39,78,0.65)';
+    dropZone.style.background  = 'rgba(200,39,78,0.09)';
+  });
+  dropZone.addEventListener('dragleave', () => {
+    dropZone.style.borderColor = 'rgba(200,39,78,0.30)';
+    dropZone.style.background  = 'rgba(200,39,78,0.04)';
+  });
+  dropZone.addEventListener('drop', e => {
+    e.preventDefault();
+    dropZone.style.borderColor = 'rgba(200,39,78,0.30)';
+    dropZone.style.background  = 'rgba(200,39,78,0.04)';
+    const file = e.dataTransfer.files[0];
+    if (!file || !file.type.startsWith('image/')) return;
+    try {
+      const dt = new DataTransfer();
+      dt.items.add(file);
+      const input = document.getElementById('screenshot-input');
+      input.files = dt.files;
+      onFileSelected(input);
+    } catch(_) {
+      // DataTransfer not supported on some browsers — ignore
+    }
+  });
+
+  // ── Skeleton loader on submit ──────────────────────────────────────────────
+  document.addEventListener('htmx:beforeRequest', function(e) {
+    if (e.target.id !== 'decode-form') return;
+    document.getElementById('decode-result').innerHTML = `
+      <div class="animate-pulse space-y-3 pt-1">
+        <div class="card" style="height:160px;">
+          <div class="flex justify-between items-center">
+            <div class="skeleton h-3 w-20 rounded"></div>
+            <div class="skeleton h-5 w-24 rounded-full"></div>
+          </div>
+          <div class="skeleton h-12 w-28 rounded-lg mt-3"></div>
+          <div class="skeleton h-2 w-full rounded-full mt-4"></div>
+        </div>
+        <div class="card" style="height:72px;">
+          <div class="skeleton h-3 w-16 rounded mb-2"></div>
+          <div class="skeleton h-4 w-5/6 rounded"></div>
+        </div>
+        <div class="card" style="height:110px;">
+          <div class="skeleton h-3 w-24 rounded mb-3"></div>
+          <div class="skeleton h-3 w-full rounded mb-2"></div>
+          <div class="skeleton h-3 w-4/5 rounded"></div>
+        </div>
+      </div>`;
+  });
+
+  // Loading state CSS
+  const s = document.createElement('style');
+  s.textContent = `
+    .htmx-request#decode-btn .btn-text   { display:none !important; }
+    .htmx-request#decode-btn .btn-loading { display:inline-block !important; }
+    .htmx-request#decode-btn #btn-icon   { display:none !important; }
+  `;
+  document.head.appendChild(s);
+</script>
+{% endblock %}

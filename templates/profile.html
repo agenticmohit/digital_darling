@@ -1,0 +1,321 @@
+{% extends base_template %}
+
+{% block content %}
+<div class="space-y-5 pt-2 pb-10">
+
+  {% if user %}
+    <!-- ── Profile Mode ──────────────────────────────────────────────────────── -->
+    <div class="text-center select-none pt-4">
+      <!-- Avatar bubble -->
+      <div class="w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold uppercase mx-auto"
+           style="background:linear-gradient(135deg,var(--crimson),var(--magenta)); color:#fff; border:2px solid rgba(200,39,78,0.3);">
+        {{ profile.email[0] if profile.email else 'U' }}
+      </div>
+
+      <!-- Email -->
+      <p class="text-sm font-semibold mt-3" style="color:var(--text);">{{ profile.email }}</p>
+
+      <!-- Plan badge -->
+      <div class="mt-2">
+        {% if profile.plan == "paid" %}
+          <span class="text-[9px] font-bold uppercase px-3 py-1 rounded-full"
+                style="background:rgba(200,39,78,0.14); color:rgba(255,160,180,0.9); border:1px solid rgba(200,39,78,0.25);">
+            Paid Member
+          </span>
+        {% else %}
+          <span class="text-[9px] font-bold uppercase px-3 py-1 rounded-full"
+                style="background:rgba(255,255,255,0.07); color:var(--sub); border:1px solid var(--border);">
+            Free Account
+          </span>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- ── Usage meter ───────────────────────────────────────────────────────── -->
+    <div class="card space-y-3">
+      <div class="flex items-center justify-between">
+        <span class="text-xs font-semibold" style="color:var(--sub);">Today's reads</span>
+        <span class="text-xs font-bold" style="color:var(--text);">
+          {% if profile.plan == "paid" %}
+            Unlimited
+          {% else %}
+            {{ usage_count }} / 3 used
+          {% endif %}
+        </span>
+      </div>
+
+      <!-- Progress bar -->
+      <div class="h-1.5 w-full rounded-full overflow-hidden" style="background:rgba(255,255,255,0.08);">
+        {% if profile.plan == "paid" %}
+          <div class="h-full rounded-full" style="width:100%; background:linear-gradient(90deg,var(--crimson),var(--magenta));"></div>
+        {% else %}
+          <div class="h-full rounded-full transition-all duration-500"
+               style="width:{{ (usage_count / 3 * 100)|int }}%; background:linear-gradient(90deg,var(--crimson),var(--magenta));"></div>
+        {% endif %}
+      </div>
+
+      {% if profile.plan != "paid" %}
+        <p class="text-[10px]" style="color:var(--muted);">
+          Resets at midnight. Upgrade for unlimited reads.
+        </p>
+      {% endif %}
+    </div>
+
+    <!-- ── Upgrade nudge (free only) ────────────────────────────────────────── -->
+    {% if profile.plan != "paid" %}
+      <div class="card-featured relative overflow-hidden"
+           style="border-color:rgba(200,39,78,0.28);">
+        <!-- Background glow -->
+        <div style="position:absolute; top:-30px; right:-30px; width:100px; height:100px;
+                    border-radius:50%; background:rgba(200,39,78,0.15); filter:blur(28px);
+                    pointer-events:none;"></div>
+
+        <div class="space-y-3 relative">
+          <div class="space-y-1">
+            <h4 class="text-sm font-semibold" style="color:var(--text);">Upgrade to Paid</h4>
+            <p class="text-xs leading-relaxed" style="color:var(--sub);">
+              Unlimited decodes, no daily cap, full history saved forever.
+            </p>
+          </div>
+          <a href="/pricing" hx-get="/pricing" hx-target="#page" hx-push-url="true"
+             class="btn-primary text-xs font-semibold py-2.5 no-underline text-center inline-block w-full">
+            See pricing &rarr;
+          </a>
+        </div>
+      </div>
+    {% endif %}
+
+    <!-- ── Settings ─────────────────────────────────────────────────────────── -->
+    <div class="card space-y-0 py-0 px-0 overflow-hidden">
+      <p class="text-[10px] font-bold tracking-widest uppercase px-5 pt-4 pb-2"
+         style="color:var(--muted);">Settings</p>
+
+      <!-- Theme toggle row -->
+      <div class="flex items-center justify-between px-5 py-3.5"
+           style="border-top:1px solid var(--border);">
+        <div>
+          <p class="text-xs font-semibold" style="color:var(--text);">Appearance</p>
+          <p class="text-[10px] mt-0.5" style="color:var(--muted);" id="theme-label">Dark mode</p>
+        </div>
+        <label class="theme-toggle" aria-label="Toggle dark mode">
+          <input type="checkbox" class="theme-switch-input" id="theme-switch"
+                 onchange="handleThemeToggle(this)">
+          <span class="theme-track"></span>
+          <span class="theme-thumb"></span>
+        </label>
+      </div>
+
+      <!-- Notifications row (cosmetic for now) -->
+      <div class="flex items-center justify-between px-5 py-3.5"
+           style="border-top:1px solid var(--border);">
+        <div>
+          <p class="text-xs font-semibold" style="color:var(--text);">Version</p>
+          <p class="text-[10px] mt-0.5" style="color:var(--muted);">DigitalDarling 1.0</p>
+        </div>
+        <span class="text-[9px] font-bold uppercase px-2.5 py-1 rounded-full"
+              style="background:rgba(200,39,78,0.12); color:rgba(255,160,180,0.9); border:1px solid rgba(200,39,78,0.22);">
+          Beta
+        </span>
+      </div>
+    </div>
+
+    <!-- ── Logout ────────────────────────────────────────────────────────────── -->
+    <div class="pt-1">
+      <!-- onclick with window.location bypasses HTMX entirely → guaranteed full page reload -->
+      <button onclick="window.location.href='/auth/logout'"
+              class="btn-secondary w-full text-xs font-semibold py-3 cursor-pointer"
+              style="color:var(--sub);">
+        Sign out
+      </button>
+    </div>
+
+    <script>
+      // Sync toggle to current theme on load
+      (function() {
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        const sw = document.getElementById('theme-switch');
+        const lbl = document.getElementById('theme-label');
+        if (sw) sw.checked = isDark;
+        if (lbl) lbl.textContent = isDark ? 'Dark mode' : 'Light mode';
+      })();
+
+      function handleThemeToggle(input) {
+        const theme = input.checked ? 'dark' : 'light';
+        window.setTheme(theme);
+        const lbl = document.getElementById('theme-label');
+        if (lbl) lbl.textContent = input.checked ? 'Dark mode' : 'Light mode';
+      }
+    </script>
+
+  {% else %}
+    <!-- ── Auth hub ──────────────────────────────────────────────────────────── -->
+    <div class="space-y-4 max-w-[340px] mx-auto pt-4 pb-4">
+
+      <!-- Header -->
+      <div class="text-center space-y-1">
+        <h2 id="auth-title" class="text-xl font-semibold" style="color:var(--text); letter-spacing:-0.3px;">
+          Join DigitalDarling
+        </h2>
+        <p id="auth-subtitle" class="text-xs" style="color:var(--sub);">
+          3 free reads every day. No credit card needed.
+        </p>
+      </div>
+
+      <!-- ── Method tabs: Password / Magic link ────────────────────────────── -->
+      <div class="flex gap-1.5 p-1 rounded-xl select-none"
+           style="background:rgba(255,255,255,0.05); border:1px solid var(--border);">
+        <button type="button" id="tab-password" onclick="setEmailTab('password')"
+                class="flex-1 py-2 rounded-lg text-xs font-semibold transition-all">
+          Password
+        </button>
+        <button type="button" id="tab-magic" onclick="setEmailTab('magic')"
+                class="flex-1 py-2 rounded-lg text-xs font-semibold transition-all">
+          Magic link
+        </button>
+      </div>
+
+      <!-- Error / success message — truly empty so empty:hidden works -->
+      <div id="auth-error"
+           class="text-xs text-center rounded-xl py-2 px-3 empty:hidden"
+           style="color:rgba(255,100,120,0.9); background:rgba(200,39,78,0.10); border:1px solid rgba(200,39,78,0.20);"></div>
+
+      <!-- ── Password section ──────────────────────────────────────────────── -->
+      <div id="password-section" class="card space-y-3.5">
+        <form id="auth-form"
+              hx-post="/auth/login"
+              hx-indicator="#auth-submit-btn"
+              class="space-y-3">
+
+          <div class="space-y-1">
+            <label for="email" class="text-[10px] font-bold tracking-widest uppercase block"
+                   style="color:var(--muted);">Email</label>
+            <input type="email" id="email" name="email"
+                   class="input-custom text-sm" placeholder="you@example.com" required>
+          </div>
+
+          <div class="space-y-1">
+            <label for="password" class="text-[10px] font-bold tracking-widest uppercase block"
+                   style="color:var(--muted);">Password</label>
+            <input type="password" id="password" name="password"
+                   class="input-custom text-sm" placeholder="••••••••" required>
+          </div>
+
+          <button type="submit" id="auth-submit-btn"
+                  class="btn-primary w-full flex items-center justify-center gap-2 mt-1">
+            <span class="btn-text" id="auth-btn-text">Sign in &rarr;</span>
+            <span class="btn-loading hidden text-sm">Working...</span>
+          </button>
+        </form>
+      </div>
+
+      <!-- Sign up / Sign in toggle -->
+      <p id="auth-toggle-row" class="text-center text-xs select-none" style="color:var(--muted);">
+        <span id="auth-toggle-prompt">Don't have an account?</span>
+        <span id="auth-toggle-link" class="font-semibold cursor-pointer ml-1"
+              style="color:var(--crimson);" onclick="toggleSignMode()">Sign up</span>
+      </p>
+
+      <!-- ── Magic link section (hidden by default) ────────────────────────── -->
+      <div id="magic-section" class="card space-y-3.5 hidden">
+        <form id="magic-form"
+              hx-post="/auth/magic-link"
+              hx-indicator="#magic-submit-btn"
+              class="space-y-3">
+
+          <div class="space-y-1">
+            <label for="magic-email" class="text-[10px] font-bold tracking-widest uppercase block"
+                   style="color:var(--muted);">Email</label>
+            <input type="email" id="magic-email" name="email"
+                   class="input-custom text-sm" placeholder="you@example.com" required>
+          </div>
+
+          <button type="submit" id="magic-submit-btn"
+                  class="btn-primary w-full flex items-center justify-center gap-2">
+            <span class="btn-text">Send magic link &rarr;</span>
+            <span class="btn-loading hidden text-sm">Sending...</span>
+          </button>
+        </form>
+        <p class="text-[10px] text-center" style="color:var(--muted);">
+          One-tap sign in link sent to your inbox. No password needed.
+        </p>
+      </div>
+
+    </div>
+
+    <script>
+      let isSignUpMode = false;
+
+      const TAB_ON  = 'background:rgba(200,39,78,0.14); color:rgba(255,180,200,0.95); border:1px solid rgba(200,39,78,0.25);';
+      const TAB_OFF = 'background:transparent; color:var(--muted); border:1px solid transparent;';
+
+      // Set initial tab styles
+      document.getElementById('tab-password').setAttribute('style', TAB_ON);
+      document.getElementById('tab-magic').setAttribute('style', TAB_OFF);
+
+      function setEmailTab(mode) {
+        const passEl   = document.getElementById('password-section');
+        const magicEl  = document.getElementById('magic-section');
+        const toggleEl = document.getElementById('auth-toggle-row');
+        const tabPass  = document.getElementById('tab-password');
+        const tabMagic = document.getElementById('tab-magic');
+        document.getElementById('auth-error').textContent = '';
+
+        if (mode === 'password') {
+          passEl.classList.remove('hidden');
+          magicEl.classList.add('hidden');
+          toggleEl.classList.remove('hidden');
+          tabPass.setAttribute('style', TAB_ON);
+          tabMagic.setAttribute('style', TAB_OFF);
+        } else {
+          passEl.classList.add('hidden');
+          magicEl.classList.remove('hidden');
+          toggleEl.classList.add('hidden');
+          tabPass.setAttribute('style', TAB_OFF);
+          tabMagic.setAttribute('style', TAB_ON);
+        }
+      }
+
+      function toggleSignMode() {
+        const form    = document.getElementById('auth-form');
+        const title   = document.getElementById('auth-title');
+        const sub     = document.getElementById('auth-subtitle');
+        const btnText = document.getElementById('auth-btn-text');
+        const prompt  = document.getElementById('auth-toggle-prompt');
+        const link    = document.getElementById('auth-toggle-link');
+        document.getElementById('auth-error').textContent = '';
+
+        if (!isSignUpMode) {
+          form.setAttribute('hx-post', '/auth/signup');
+          title.textContent  = 'Create account';
+          sub.textContent    = 'Claim your 3 daily reads and save your analysis history.';
+          btnText.textContent = 'Create account →';
+          prompt.textContent  = 'Already have an account?';
+          link.textContent    = 'Sign in';
+          isSignUpMode = true;
+        } else {
+          form.setAttribute('hx-post', '/auth/login');
+          title.textContent  = 'Join DigitalDarling';
+          sub.textContent    = '3 free reads every day. No credit card needed.';
+          btnText.textContent = 'Sign in →';
+          prompt.textContent  = "Don't have an account?";
+          link.textContent    = 'Sign up';
+          isSignUpMode = false;
+        }
+        htmx.process(form);
+      }
+
+      if (!document.getElementById('auth-loader-style')) {
+        const s = document.createElement('style');
+        s.id = 'auth-loader-style';
+        s.textContent = `
+          .htmx-request#auth-submit-btn  .btn-text    { display:none !important; }
+          .htmx-request#auth-submit-btn  .btn-loading { display:inline-block !important; }
+          .htmx-request#magic-submit-btn .btn-text    { display:none !important; }
+          .htmx-request#magic-submit-btn .btn-loading { display:inline-block !important; }
+        `;
+        document.head.appendChild(s);
+      }
+    </script>
+  {% endif %}
+</div>
+{% endblock %}

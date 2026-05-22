@@ -1,0 +1,218 @@
+{% extends base_template %}
+
+{% block content %}
+<div class="pb-8">
+
+  <!-- ── HERO ─────────────────────────────────────────────────────────────── -->
+  <div class="pt-5 pb-2 px-1">
+
+    <!-- ─────────────────────────────────────────────────────────────────────
+         HERO IMAGE
+         File name : hero.png  (or hero.webp for smaller file size)
+         Folder    : static/images/
+         Full path : static/images/hero.png
+         Size      : 800 × 460 px  (displays at ~448 × 258 px, 2x for retina)
+         Format    : PNG with transparent bg, or WebP
+         Style     : Abstract illustration — girl (left) and boy (right),
+                     warm crimson / magenta palette, dark or transparent bg,
+                     phones in hand with chat bubbles between them.
+                     Must work on both dark (#180C12) and light (#FDF4F7) backgrounds.
+
+         Once you have the image, replace the placeholder div below with:
+         <img src="/static/images/hero.png"
+              alt="DigitalDarling hero illustration"
+              class="w-full h-auto rounded-3xl mb-5"
+              style="display:block;">
+    ──────────────────────────────────────────────────────────────────────── -->
+
+    <img src="/static/images/hero.png"
+         alt="DigitalDarling hero illustration"
+         class="w-full h-auto rounded-3xl mb-5"
+         style="display:block;">
+
+    <!-- Hero text -->
+    <div class="text-center space-y-3 px-2">
+      <h1 style="font-size:26px; font-weight:600; letter-spacing:-0.5px; line-height:1.2; color:var(--text);">
+        Figure out what they're
+        <em style="font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:300;
+                   font-size:38px; letter-spacing:-0.5px; line-height:1.1;
+                   background:linear-gradient(135deg,#C8274E,#A8146A);
+                   -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+                   background-clip:text; display:block; margin-top:2px;">
+          actually saying
+        </em>
+      </h1>
+      <p class="text-sm leading-relaxed mx-auto" style="max-width:290px; color:var(--sub);">
+        Paste any chat or drop a screenshot. Get an honest interest score, red flags surfaced, and 3 replies you can send right now.
+      </p>
+    </div>
+
+    <!-- CTA -->
+    <div class="mt-5 px-1">
+      <a href="/decode" hx-get="/decode" hx-target="#page" hx-push-url="true"
+         class="btn-primary no-underline flex items-center justify-center gap-2">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M2 12h2.5M19.5 12H22M5.5 12l1.8-4.5 3.2 9 3-9 2 4.5"/>
+        </svg>
+        Read the vibe
+      </a>
+    </div>
+
+    <!-- Platform note -->
+    <p class="text-center text-[10px] mt-3 select-none" style="color:var(--muted);">
+      Works with WhatsApp · iMessage · Instagram · Any chat app
+    </p>
+  </div>
+
+  <!-- ── WHAT YOU GET ───────────────────────────────────────────────────────── -->
+  <div class="mt-8">
+    <span class="section-label px-1">What you get</span>
+
+    <div class="card flex items-start gap-4">
+      <div class="flex-shrink-0 w-10 h-10 rounded-2xl flex items-center justify-center"
+           style="background:rgba(200,39,78,0.12); border:1px solid rgba(200,39,78,0.20);">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--crimson)"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+        </svg>
+      </div>
+      <div>
+        <p class="text-sm font-semibold" style="color:var(--text);">Honest interest score</p>
+        <p class="text-xs mt-1 leading-relaxed" style="color:var(--sub);">
+          0 to 100. No sugarcoating. Comes with a plain-English label like "Hot &amp; Cold" or "Genuinely Interested" — the read your best friend would give you.
+        </p>
+      </div>
+    </div>
+
+    <div class="card flex items-start gap-4">
+      <div class="flex-shrink-0 w-10 h-10 rounded-2xl flex items-center justify-center"
+           style="background:rgba(200,39,78,0.12); border:1px solid rgba(200,39,78,0.20);">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--crimson)"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/>
+          <line x1="4" y1="22" x2="4" y2="15"/>
+        </svg>
+      </div>
+      <div>
+        <p class="text-sm font-semibold" style="color:var(--text);">Red flags, actually named</p>
+        <p class="text-xs mt-1 leading-relaxed" style="color:var(--sub);">
+          Breadcrumbing, mixed signals, hot and cold — called out by name with specific examples from your chat. Not generic advice.
+        </p>
+      </div>
+    </div>
+
+    <div class="card flex items-start gap-4">
+      <div class="flex-shrink-0 w-10 h-10 rounded-2xl flex items-center justify-center"
+           style="background:rgba(200,39,78,0.12); border:1px solid rgba(200,39,78,0.20);">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--crimson)"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+        </svg>
+      </div>
+      <div>
+        <p class="text-sm font-semibold" style="color:var(--text);">3 ready-to-send replies</p>
+        <p class="text-xs mt-1 leading-relaxed" style="color:var(--sub);">
+          Bold, balanced, or pull-back. Tap to copy. Each one sounds like a real person wrote it — because the AI matches your exact tone and language.
+        </p>
+      </div>
+    </div>
+
+    <div class="card flex items-start gap-4">
+      <div class="flex-shrink-0 w-10 h-10 rounded-2xl flex items-center justify-center"
+           style="background:rgba(200,39,78,0.12); border:1px solid rgba(200,39,78,0.20);">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--crimson)"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/>
+          <circle cx="12" cy="13" r="4"/>
+        </svg>
+      </div>
+      <div>
+        <p class="text-sm font-semibold" style="color:var(--text);">Just drop a screenshot</p>
+        <p class="text-xs mt-1 leading-relaxed" style="color:var(--sub);">
+          No typing needed. Upload a screenshot from any app — we read the bubbles, figure out who said what, and analyse it automatically.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── HOW IT WORKS ───────────────────────────────────────────────────────── -->
+  <div class="mt-8">
+    <span class="section-label px-1">How it works</span>
+
+    <div class="card-featured">
+      <div class="flex items-start gap-3">
+        <span class="flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-bold text-white mt-0.5"
+              style="background:linear-gradient(135deg,var(--crimson),var(--magenta));">1</span>
+        <div>
+          <p class="text-sm font-semibold" style="color:var(--text);">Drop in the chat</p>
+          <p class="text-xs mt-1 leading-relaxed" style="color:var(--sub);">
+            Paste the text or upload a screenshot. Works with any chat app.
+          </p>
+        </div>
+      </div>
+
+      <div class="flex items-start gap-3 mt-4 pt-4" style="border-top:1px solid rgba(200,39,78,0.12);">
+        <span class="flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-bold text-white mt-0.5"
+              style="background:linear-gradient(135deg,var(--crimson),var(--magenta));">2</span>
+        <div>
+          <p class="text-sm font-semibold" style="color:var(--text);">We read between the lines</p>
+          <p class="text-xs mt-1 leading-relaxed" style="color:var(--sub);">
+            AI picks up tone, timing, and everything not being said. Hinglish, slang, formal — auto-detected.
+          </p>
+        </div>
+      </div>
+
+      <div class="flex items-start gap-3 mt-4 pt-4" style="border-top:1px solid rgba(200,39,78,0.12);">
+        <span class="flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-bold text-white mt-0.5"
+              style="background:linear-gradient(135deg,var(--crimson),var(--magenta));">3</span>
+        <div>
+          <p class="text-sm font-semibold" style="color:var(--text);">You pick your move</p>
+          <p class="text-xs mt-1 leading-relaxed" style="color:var(--sub);">
+            Score, verdict, flags, and 3 replies ready to copy. Takes about 5 seconds.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── PWA INSTALL ────────────────────────────────────────────────────────── -->
+  <div class="pwa-install-card card flex items-center gap-3 py-4 px-4 mt-8"
+       style="border-color:rgba(200,39,78,0.18);">
+    <div class="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
+         style="background:rgba(200,39,78,0.10); border:1px solid rgba(200,39,78,0.18); color:var(--crimson);">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="5" y="2" width="14" height="20" rx="2"/>
+        <line x1="12" y1="18" x2="12" y2="18.01"/>
+      </svg>
+    </div>
+    <div class="flex-1 min-w-0">
+      <p class="text-xs font-semibold" style="color:var(--text);">Add to your home screen</p>
+      <p class="text-[10px] mt-0.5 leading-snug" style="color:var(--muted);">
+        iOS: Share &rarr; Add to Home Screen &nbsp;·&nbsp; Android: tap Install
+      </p>
+    </div>
+    <button onclick="window.triggerPwaInstall()"
+            class="text-xs font-semibold px-3 py-1.5 rounded-full flex-shrink-0 text-white active:scale-95 transition-transform"
+            style="background:linear-gradient(135deg,var(--crimson),var(--magenta));">
+      Install
+    </button>
+  </div>
+
+  <!-- ── FREE TIER NUDGE ────────────────────────────────────────────────────── -->
+  <div class="card text-center py-6" style="border-color:rgba(200,39,78,0.16);">
+    <p class="text-sm font-semibold" style="color:var(--text);">Try it free — no card needed</p>
+    <p class="text-xs mt-2 leading-relaxed" style="color:var(--sub);">
+      Every account gets <span style="color:var(--text); font-weight:600;">3 free reads every day</span>,
+      resets at midnight. Upgrade for unlimited at &#8377;299/month.
+    </p>
+    <a href="/pricing" hx-get="/pricing" hx-target="#page" hx-push-url="true"
+       class="text-xs font-semibold mt-3 inline-block no-underline"
+       style="color:var(--crimson);">
+      See plans &rarr;
+    </a>
+  </div>
+
+</div>
+{% endblock %}
