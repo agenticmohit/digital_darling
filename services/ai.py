@@ -198,7 +198,7 @@ async def analyze_chat(chat_text: str) -> dict:
 
     try:
         response = await client.chat.completions.create(
-            model="gpt-4o",
+            model="gpt-4o-mini",
             messages=[
                 {"role": "system", "content": SYSTEM_PROMPT},
                 {"role": "user", "content": f"Analyze this conversation:\n\n{chat_text}"},

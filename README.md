@@ -13,7 +13,7 @@
 [![Python](https://img.shields.io/badge/Python_3.12-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
 [![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
 [![HTMX](https://img.shields.io/badge/HTMX-3D72D7?style=for-the-badge)](https://htmx.org)
-[![OpenAI](https://img.shields.io/badge/GPT--4o-412991?style=for-the-badge&logo=openai&logoColor=white)](https://openai.com)
+[![OpenAI](https://img.shields.io/badge/GPT--4o--mini-412991?style=for-the-badge&logo=openai&logoColor=white)](https://openai.com)
 [![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)](https://supabase.com)
 [![Railway](https://img.shields.io/badge/Railway-0B0D0E?style=for-the-badge&logo=railway&logoColor=white)](https://railway.app)
 
@@ -36,7 +36,7 @@ Use the beta account to experience the full app with real GPT-4o-mini analysis.
 | ⚡ **Limit** | 5 reads / day · resets midnight UTC |
 | 💳 **Payment** | Not required |
 
-*Paste any real conversation or drop a screenshot — live GPT-4o reads the vibe instantly.*
+*Paste any real conversation or drop a screenshot — live GPT-4o-mini reads the vibe instantly.*
 
 </div>
 
@@ -116,10 +116,10 @@ No auth state in `localStorage`. No client-side token handling. JWT validated on
 </details>
 
 <details>
-<summary><strong>GPT-4o vision for screenshot extraction</strong></summary>
+<summary><strong>GPT-4o-mini for analysis and screenshot extraction</strong></summary>
 <br/>
 
-Upload any chat screenshot — WhatsApp, iMessage, Instagram DMs, Telegram, Snapchat. GPT-4o extracts the conversation using the left/right bubble alignment heuristic (right = You, left = Them). Works universally across all major platforms.
+Upload any chat screenshot — WhatsApp, iMessage, Instagram DMs, Telegram, Snapchat. GPT-4o-mini extracts the conversation using the left/right bubble alignment heuristic (right = You, left = Them). Works universally across all major platforms.
 
 </details>
 
@@ -151,7 +151,7 @@ Identical conversations return cached results instantly. SHA-256 hash as key, `c
 | Templates | **Jinja2** | Server-rendered, pairs perfectly with HTMX |
 | Frontend | **HTMX** | SPA feel without a JavaScript build pipeline |
 | Styling | **Tailwind CDN** + CSS custom props | Dark/light theme, zero config |
-| AI | **OpenAI GPT-4o** | Vision + text in one model; best JSON adherence |
+| AI | **OpenAI GPT-4o-mini** | Vision + text in one model; best JSON adherence at low cost |
 | Auth + DB | **Supabase** | Instant Postgres + auth, row-level security out of the box |
 | Payments | **Razorpay** | Native INR, no card data on our servers |
 | Rate limiting | **SlowAPI** | Per-route limits, one decorator |
@@ -176,7 +176,7 @@ digital_darling/
 │   └── payments.py            # Razorpay order creation + webhook
 │
 ├── services/
-│   ├── ai.py                  # GPT-4o analysis + vision extraction
+│   ├── ai.py                  # GPT-4o-mini analysis + vision extraction
 │   ├── supabase_client.py     # Auth helpers, profile/usage/history CRUD
 │   ├── beta.py                # In-memory beta user tracking (no DB needed)
 │   └── cache.py               # SHA-256 keyed TTLCache
