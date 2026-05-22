@@ -171,19 +171,6 @@
         </p>
       </div>
 
-      <!-- ── Method tabs: Password / Magic link ────────────────────────────── -->
-      <div class="flex gap-1.5 p-1 rounded-xl select-none"
-           style="background:rgba(255,255,255,0.05); border:1px solid var(--border);">
-        <button type="button" id="tab-password" onclick="setEmailTab('password')"
-                class="flex-1 py-2 rounded-lg text-xs font-semibold transition-all">
-          Password
-        </button>
-        <button type="button" id="tab-magic" onclick="setEmailTab('magic')"
-                class="flex-1 py-2 rounded-lg text-xs font-semibold transition-all">
-          Magic link
-        </button>
-      </div>
-
       <!-- Error / success message — truly empty so empty:hidden works -->
       <div id="auth-error"
            class="text-xs text-center rounded-xl py-2 px-3 empty:hidden"
@@ -225,65 +212,10 @@
               style="color:var(--crimson);" onclick="toggleSignMode()">Sign up</span>
       </p>
 
-      <!-- ── Magic link section (hidden by default) ────────────────────────── -->
-      <div id="magic-section" class="card space-y-3.5 hidden">
-        <form id="magic-form"
-              hx-post="/auth/magic-link"
-              hx-indicator="#magic-submit-btn"
-              class="space-y-3">
-
-          <div class="space-y-1">
-            <label for="magic-email" class="text-[10px] font-bold tracking-widest uppercase block"
-                   style="color:var(--muted);">Email</label>
-            <input type="email" id="magic-email" name="email"
-                   class="input-custom text-sm" placeholder="you@example.com" required>
-          </div>
-
-          <button type="submit" id="magic-submit-btn"
-                  class="btn-primary w-full flex items-center justify-center gap-2">
-            <span class="btn-text">Send magic link &rarr;</span>
-            <span class="btn-loading hidden text-sm">Sending...</span>
-          </button>
-        </form>
-        <p class="text-[10px] text-center" style="color:var(--muted);">
-          One-tap sign in link sent to your inbox. No password needed.
-        </p>
-      </div>
-
     </div>
 
     <script>
       let isSignUpMode = false;
-
-      const TAB_ON  = 'background:rgba(200,39,78,0.14); color:rgba(255,180,200,0.95); border:1px solid rgba(200,39,78,0.25);';
-      const TAB_OFF = 'background:transparent; color:var(--muted); border:1px solid transparent;';
-
-      // Set initial tab styles
-      document.getElementById('tab-password').setAttribute('style', TAB_ON);
-      document.getElementById('tab-magic').setAttribute('style', TAB_OFF);
-
-      function setEmailTab(mode) {
-        const passEl   = document.getElementById('password-section');
-        const magicEl  = document.getElementById('magic-section');
-        const toggleEl = document.getElementById('auth-toggle-row');
-        const tabPass  = document.getElementById('tab-password');
-        const tabMagic = document.getElementById('tab-magic');
-        document.getElementById('auth-error').textContent = '';
-
-        if (mode === 'password') {
-          passEl.classList.remove('hidden');
-          magicEl.classList.add('hidden');
-          toggleEl.classList.remove('hidden');
-          tabPass.setAttribute('style', TAB_ON);
-          tabMagic.setAttribute('style', TAB_OFF);
-        } else {
-          passEl.classList.add('hidden');
-          magicEl.classList.remove('hidden');
-          toggleEl.classList.add('hidden');
-          tabPass.setAttribute('style', TAB_OFF);
-          tabMagic.setAttribute('style', TAB_ON);
-        }
-      }
 
       function toggleSignMode() {
         const form    = document.getElementById('auth-form');
@@ -318,10 +250,8 @@
         const s = document.createElement('style');
         s.id = 'auth-loader-style';
         s.textContent = `
-          .htmx-request#auth-submit-btn  .btn-text    { display:none !important; }
-          .htmx-request#auth-submit-btn  .btn-loading { display:inline-block !important; }
-          .htmx-request#magic-submit-btn .btn-text    { display:none !important; }
-          .htmx-request#magic-submit-btn .btn-loading { display:inline-block !important; }
+          .htmx-request#auth-submit-btn .btn-text    { display:none !important; }
+          .htmx-request#auth-submit-btn .btn-loading { display:inline-block !important; }
         `;
         document.head.appendChild(s);
       }
