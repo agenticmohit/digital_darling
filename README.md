@@ -21,6 +21,27 @@
 
 ---
 
+## 🚀 Try it live — no sign-up required
+
+<div align="center">
+
+### **[digitaldarling.app](https://digitaldarling.app)**
+
+Use the beta account to experience the full app with real GPT-4o-mini analysis.
+
+| | |
+|:---:|:---|
+| 📧 **Email** | `beta_user@dd.com` |
+| 🔑 **Password** | `beta1234` |
+| ⚡ **Limit** | 5 reads / day · resets midnight UTC |
+| 💳 **Payment** | Not required |
+
+*Paste any real conversation or drop a screenshot — live GPT-4o reads the vibe instantly.*
+
+</div>
+
+---
+
 ## 🔍 The Problem
 
 Everyone has had *that* conversation — the one you can't stop re-reading.
@@ -60,7 +81,7 @@ A mobile-first web app that reads a conversation the way your most perceptive fr
 ## 🏗️ Architecture
 
 ```
-Browser  ──── HTMX ────▶  FastAPI  ──── async ────▶  OpenAI GPT-4o
+Browser  ──── HTMX ────▶  FastAPI  ──── async ────▶  OpenAI GPT-4o-mini
                               │
                           Supabase
                        Auth + Postgres
@@ -157,6 +178,7 @@ digital_darling/
 ├── services/
 │   ├── ai.py                  # GPT-4o analysis + vision extraction
 │   ├── supabase_client.py     # Auth helpers, profile/usage/history CRUD
+│   ├── beta.py                # In-memory beta user tracking (no DB needed)
 │   └── cache.py               # SHA-256 keyed TTLCache
 │
 ├── templates/
@@ -165,6 +187,9 @@ digital_darling/
 │   ├── history.html           # Saved reads list
 │   ├── pricing.html           # Free vs Paid, Razorpay checkout
 │   ├── profile.html           # Auth hub + user settings
+│   ├── privacy.html           # Privacy Policy
+│   ├── terms.html             # Terms & Conditions
+│   ├── refund.html            # Cancellation & Refund Policy
 │   └── partials/              # HTMX fragments: result, paywall, error
 │
 ├── static/                    # PWA icons, manifest, service worker

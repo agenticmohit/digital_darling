@@ -22,6 +22,11 @@
                 style="background:rgba(200,39,78,0.14); color:rgba(255,160,180,0.9); border:1px solid rgba(200,39,78,0.25);">
             Paid Member
           </span>
+        {% elif profile.plan == "beta" %}
+          <span class="text-[9px] font-bold uppercase px-3 py-1 rounded-full"
+                style="background:rgba(168,20,106,0.18); color:rgba(255,160,220,0.95); border:1px solid rgba(168,20,106,0.30);">
+            Beta Tester
+          </span>
         {% else %}
           <span class="text-[9px] font-bold uppercase px-3 py-1 rounded-full"
                 style="background:rgba(255,255,255,0.07); color:var(--sub); border:1px solid var(--border);">
@@ -32,6 +37,7 @@
     </div>
 
     <!-- ── Usage meter ───────────────────────────────────────────────────────── -->
+    {% set daily_limit = beta_daily_limit if profile.plan == "beta" else 3 %}
     <div class="card space-y-3">
       <div class="flex items-center justify-between">
         <span class="text-xs font-semibold" style="color:var(--sub);">Today's reads</span>
@@ -39,7 +45,7 @@
           {% if profile.plan == "paid" %}
             Unlimited
           {% else %}
-            {{ usage_count }} / 3 used
+            {{ usage_count }} / {{ daily_limit }} used
           {% endif %}
         </span>
       </div>
@@ -50,19 +56,23 @@
           <div class="h-full rounded-full" style="width:100%; background:linear-gradient(90deg,var(--crimson),var(--magenta));"></div>
         {% else %}
           <div class="h-full rounded-full transition-all duration-500"
-               style="width:{{ (usage_count / 3 * 100)|int }}%; background:linear-gradient(90deg,var(--crimson),var(--magenta));"></div>
+               style="width:{{ (usage_count / daily_limit * 100)|int }}%; background:linear-gradient(90deg,var(--crimson),var(--magenta));"></div>
         {% endif %}
       </div>
 
-      {% if profile.plan != "paid" %}
+      {% if profile.plan == "beta" %}
+        <p class="text-[10px]" style="color:var(--muted);">
+          Beta access — {{ daily_limit }} reads/day, resets at midnight UTC.
+        </p>
+      {% elif profile.plan != "paid" %}
         <p class="text-[10px]" style="color:var(--muted);">
           Resets at midnight. Upgrade for unlimited reads.
         </p>
       {% endif %}
     </div>
 
-    <!-- ── Upgrade nudge (free only) ────────────────────────────────────────── -->
-    {% if profile.plan != "paid" %}
+    <!-- ── Upgrade nudge (free only, not shown for beta) ───────────────────── -->
+    {% if profile.plan not in ("paid", "beta") %}
       <div class="card-featured relative overflow-hidden"
            style="border-color:rgba(200,39,78,0.28);">
         <!-- Background glow -->

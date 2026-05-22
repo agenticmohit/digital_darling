@@ -12,6 +12,9 @@ from services.supabase_client import (
 )
 from services.cache import make_key, cache_get, cache_set
 from services.ai import analyze_chat, extract_chat_from_screenshot
+from services.beta import (
+    is_beta_user, get_beta_usage, increment_beta_usage, BETA_DAILY_LIMIT
+)
 
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
@@ -85,13 +88,19 @@ async def decode_chat(
     user_id = user["sub"]
 
     # ── 4. Usage / plan gate ───────────────────────────────────────────────────
-    profile = await get_user_profile(user_id)
-    plan = profile.get("plan", "free").lower()
-
-    if plan != "paid":
-        usage_count = await get_user_usage(user_id)
-        if usage_count >= 3:
+    if is_beta_user(user):
+        # Beta user: in-memory 5/day counter, no Supabase needed
+        usage_count = get_beta_usage()
+        if usage_count >= BETA_DAILY_LIMIT:
             return templates.TemplateResponse(request, "partials/paywall.html")
+        plan = "beta"
+    else:
+        profile = await get_user_profile(user_id)
+        plan = profile.get("plan", "free").lower()
+        if plan != "paid":
+            usage_count = await get_user_usage(user_id)
+            if usage_count >= 3:
+                return templates.TemplateResponse(request, "partials/paywall.html")
 
     # ── 5. Cache lookup ────────────────────────────────────────────────────────
     cache_key = make_key(chat_text)
@@ -112,7 +121,11 @@ async def decode_chat(
         )
 
     # ── 7. Persist ─────────────────────────────────────────────────────────────
-    await increment_user_usage(user_id)
+    if is_beta_user(user):
+        increment_beta_usage()
+    else:
+        await increment_user_usage(user_id)
+
     await add_history_entry(user_id, chat_text, result["score"], result["label"], result)
     cache_set(cache_key, result)
 

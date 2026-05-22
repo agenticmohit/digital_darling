@@ -8,6 +8,7 @@ from services.supabase_client import (
     get_or_create_profile,
     get_current_user,
 )
+from services.beta import BETA_EMAIL, BETA_PASSWORD, get_beta_user_id
 from config import settings
 import hashlib
 import jwt
@@ -115,9 +116,24 @@ async def handle_login(
         return _auth_error_response(request, "Password must be between 8 and 128 characters.")
 
     try:
-        if settings.is_sandbox_mode:
+        # ── Beta user — hardcoded credentials, works in any mode ──────────────
+        if email == BETA_EMAIL:
+            if password != BETA_PASSWORD:
+                return _auth_error_response(request, "Invalid email or password.")
+            token = _mock_token(email)
+            await get_or_create_profile(get_beta_user_id(), email)
+
+        # ── Beta mode — deployed with real AI but no Supabase ─────────────────
+        # Only the beta user above is allowed; block everything else
+        elif settings.is_beta_mode:
+            return _auth_error_response(request, "Invalid email or password.")
+
+        # ── Local sandbox — any credentials (dev convenience) ─────────────────
+        elif settings.is_sandbox_mode:
             token = _mock_token(email)
             await get_or_create_profile(_make_mock_user_id(email), email)
+
+        # ── Production Supabase ───────────────────────────────────────────────
         else:
             auth_res = supabase.auth.sign_in_with_password({"email": email, "password": password})
             if not auth_res.session:
@@ -156,6 +172,13 @@ async def handle_signup(
         return _auth_error_response(request, "Password must be at least 8 characters.")
 
     try:
+        # Beta mode — no sign-ups, use the beta account to try the app
+        if settings.is_beta_mode:
+            return _auth_error_response(
+                request,
+                "Sign-ups are paused during beta. Use the beta account to try the app."
+            )
+
         if settings.is_sandbox_mode:
             token = _mock_token(email)
             await get_or_create_profile(_make_mock_user_id(email), email)

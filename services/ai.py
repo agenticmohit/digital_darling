@@ -158,14 +158,14 @@ If the image is not a chat screenshot or is too blurry to read, return exactly t
 
 async def extract_chat_from_screenshot(image_bytes: bytes, mime_type: str) -> str:
     """Use GPT-4o vision to pull the conversation out of a chat screenshot."""
-    # SANDBOX_MOCK: return fake extracted chat when no real API key
-    if settings.is_sandbox_mode:
+    # Return mock when no real OpenAI key is present
+    if not settings.use_real_ai:
         return _SANDBOX_MOCK_SCREENSHOT
 
     try:
         image_b64 = base64.b64encode(image_bytes).decode()
         response = await client.chat.completions.create(
-            model="gpt-4o",
+            model="gpt-4o-mini",
             messages=[
                 {
                     "role": "user",
@@ -192,8 +192,8 @@ async def extract_chat_from_screenshot(image_bytes: bytes, mime_type: str) -> st
 
 
 async def analyze_chat(chat_text: str) -> dict:
-    # SANDBOX_MOCK: skip OpenAI when key is placeholder
-    if settings.is_sandbox_mode:
+    # Use mock result when no real OpenAI key is present
+    if not settings.use_real_ai:
         return dict(_SANDBOX_MOCK_RESULT)
 
     try:

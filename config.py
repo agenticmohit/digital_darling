@@ -15,12 +15,26 @@ class Settings(BaseSettings):
 
     @property
     def is_sandbox_mode(self) -> bool:
-        # Returns True if credentials are placeholders or env is development
+        """True when Supabase is placeholder — mocks auth and DB."""
         return (
             "xxxx.supabase.co" in self.supabase_url or
             "placeholder" in self.supabase_anon_key or
             self.environment == "development"
         )
+
+    @property
+    def use_real_ai(self) -> bool:
+        """True when a real OpenAI key is present — enables live GPT-4o calls."""
+        key = self.openai_api_key
+        return (
+            key not in ("placeholder", "", "sk-...")
+            and len(key) > 20
+        )
+
+    @property
+    def is_beta_mode(self) -> bool:
+        """Deployed beta: real OpenAI, mock auth/DB, only beta credentials work."""
+        return self.is_sandbox_mode and self.use_real_ai and self.environment == "production"
 
 settings = Settings()
 

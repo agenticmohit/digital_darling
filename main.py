@@ -14,6 +14,7 @@ from services.supabase_client import (
     get_user_usage,
     get_user_history
 )
+from services.beta import is_beta_user, get_beta_usage, beta_reads_left, BETA_DAILY_LIMIT
 
 app = FastAPI(
     title="DigitalDarling",
@@ -125,14 +126,20 @@ async def profile_page(request: Request):
 
     if user:
         user_id = user["sub"]
-        profile = await get_user_profile(user_id)
-        usage_count = await get_user_usage(user_id)
+        if is_beta_user(user):
+            # Use in-memory counter for beta user; build a synthetic profile
+            profile = {"email": user.get("email", ""), "plan": "beta"}
+            usage_count = get_beta_usage()
+        else:
+            profile = await get_user_profile(user_id)
+            usage_count = await get_user_usage(user_id)
 
     return templates.TemplateResponse(request, "profile.html", {
         "base_template": get_base_template(request),
         "user": user,
         "profile": profile,
-        "usage_count": usage_count
+        "usage_count": usage_count,
+        "beta_daily_limit": BETA_DAILY_LIMIT,
     })
 
 @app.get("/pricing", response_class=HTMLResponse)
