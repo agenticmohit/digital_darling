@@ -150,3 +150,29 @@ async def pricing_page(request: Request):
         "user": user,
         "plan": plan
     })
+
+# ── Legal pages ────────────────────────────────────────────────────────────────
+
+@app.get("/privacy", response_class=HTMLResponse)
+async def privacy_page(request: Request):
+    user = get_current_user(request)
+    return templates.TemplateResponse(request, "privacy.html", {
+        "base_template": get_base_template(request),
+        "user": user,
+    })
+
+@app.get("/terms", response_class=HTMLResponse)
+async def terms_page(request: Request):
+    user = get_current_user(request)
+    return templates.TemplateResponse(request, "terms.html", {
+        "base_template": get_base_template(request),
+        "user": user,
+    })
+
+@app.get("/refund", response_class=HTMLResponse)
+async def refund_page(request: Request):
+    user = get_current_user(request)
+    return templates.TemplateResponse(request, "refund.html", {
+        "base_template": get_base_template(request),
+        "user": user,
+    })

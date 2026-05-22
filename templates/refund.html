@@ -1,0 +1,137 @@
+{% extends base_template %}
+
+{% block content %}
+<div class="pb-10 pt-2">
+
+  <div class="space-y-1 mb-6">
+    <p class="text-[10px] font-bold tracking-widest uppercase" style="color:var(--crimson);">Legal</p>
+    <h1 class="text-xl font-semibold" style="color:var(--text); letter-spacing:-0.3px;">Cancellation &amp; Refund Policy</h1>
+    <p class="text-xs" style="color:var(--muted);">Last updated: June 2025</p>
+  </div>
+
+  <!-- Summary card -->
+  <div class="card-featured mb-3 space-y-2">
+    <p class="text-xs font-bold tracking-widest uppercase" style="color:rgba(255,160,180,0.9);">Summary</p>
+    <p class="text-xs leading-relaxed" style="color:var(--sub);">
+      Cancel anytime. You won't be charged again. Refunds for the current billing period are reviewed on a
+      case-by-case basis — contact us within <strong style="color:var(--text);">48 hours</strong> of a charge.
+    </p>
+  </div>
+
+  <!-- Who -->
+  <div class="card space-y-2 mb-3">
+    <p class="text-xs font-bold tracking-widest uppercase" style="color:var(--muted);">Merchant details</p>
+    <p class="text-xs leading-relaxed" style="color:var(--sub);">
+      This policy applies to payments made to <strong style="color:var(--text);">Yuvneer ProCommerce LLP</strong>
+      for the DigitalDarling subscription service. All transactions are processed in Indian Rupees (INR) via Razorpay.
+    </p>
+  </div>
+
+  <!-- Cancellation -->
+  <div class="card space-y-3 mb-3">
+    <p class="text-xs font-bold tracking-widest uppercase" style="color:var(--muted);">Cancellation</p>
+    <div class="space-y-2.5">
+      <div class="flex items-start gap-2.5">
+        <span class="dot-accent mt-1.5 flex-shrink-0"></span>
+        <p class="text-xs leading-relaxed" style="color:var(--sub);">
+          You may cancel your subscription at any time by emailing
+          <a href="mailto:hello@digitaldarling.app" style="color:var(--crimson);">hello@digitaldarling.app</a>.
+        </p>
+      </div>
+      <div class="flex items-start gap-2.5" style="border-top:1px solid var(--border); padding-top:10px;">
+        <span class="dot-accent mt-1.5 flex-shrink-0"></span>
+        <p class="text-xs leading-relaxed" style="color:var(--sub);">
+          Cancellation takes effect immediately. Your account reverts to the free plan (3 reads/day).
+        </p>
+      </div>
+      <div class="flex items-start gap-2.5" style="border-top:1px solid var(--border); padding-top:10px;">
+        <span class="dot-accent mt-1.5 flex-shrink-0"></span>
+        <p class="text-xs leading-relaxed" style="color:var(--sub);">
+          You will not be billed again after cancellation. No auto-renewal once cancelled.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Refunds -->
+  <div class="card space-y-3 mb-3">
+    <p class="text-xs font-bold tracking-widest uppercase" style="color:var(--muted);">Refunds</p>
+
+    <div class="flex items-start gap-2.5">
+      <span class="dot-accent mt-1.5 flex-shrink-0"></span>
+      <div>
+        <p class="text-xs font-semibold mb-1" style="color:var(--text);">Digital service — generally non-refundable</p>
+        <p class="text-xs leading-relaxed" style="color:var(--sub);">
+          DigitalDarling is a digital subscription service. Once a billing cycle has begun and the Service has been
+          accessed, fees for that period are non-refundable as a general rule, in accordance with applicable Indian
+          consumer protection regulations for digital goods.
+        </p>
+      </div>
+    </div>
+
+    <div class="flex items-start gap-2.5" style="border-top:1px solid var(--border); padding-top:12px;">
+      <span class="dot-accent mt-1.5 flex-shrink-0"></span>
+      <div>
+        <p class="text-xs font-semibold mb-1" style="color:var(--text);">Exceptions we honour</p>
+        <p class="text-xs leading-relaxed" style="color:var(--sub);">
+          We will issue a full refund if:
+        </p>
+        <div class="mt-2 space-y-1.5">
+          {% for item in [
+            "You were charged in error (duplicate charge, technical failure)",
+            "You request a refund within 48 hours of your first-ever payment and have not used the paid features",
+            "The Service was unavailable for more than 24 consecutive hours in a billing period due to our fault"
+          ] %}
+          <div class="flex items-start gap-2 text-xs" style="color:var(--sub);">
+            <span style="color:var(--crimson); flex-shrink:0;">→</span>
+            <span>{{ item }}</span>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    <div class="flex items-start gap-2.5" style="border-top:1px solid var(--border); padding-top:12px;">
+      <span class="dot-accent mt-1.5 flex-shrink-0"></span>
+      <div>
+        <p class="text-xs font-semibold mb-1" style="color:var(--text);">How to request a refund</p>
+        <p class="text-xs leading-relaxed" style="color:var(--sub);">
+          Email <a href="mailto:hello@digitaldarling.app" style="color:var(--crimson);">hello@digitaldarling.app</a> with
+          the subject line <em>"Refund Request"</em> and include your registered email address and Razorpay payment ID.
+          We aim to respond within 2 business days.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Timeline -->
+  <div class="card space-y-2 mb-3">
+    <p class="text-xs font-bold tracking-widest uppercase" style="color:var(--muted);">Refund timeline</p>
+    <p class="text-xs leading-relaxed" style="color:var(--sub);">
+      Approved refunds are processed back to the original payment method within
+      <strong style="color:var(--text);">5–7 business days</strong> via Razorpay.
+      Actual credit timing depends on your bank or card issuer.
+    </p>
+  </div>
+
+  <!-- Contact -->
+  <div class="card space-y-2 mb-6">
+    <p class="text-xs font-bold tracking-widest uppercase" style="color:var(--muted);">Contact</p>
+    <p class="text-xs leading-relaxed" style="color:var(--sub);">
+      For any billing queries, write to us at
+      <a href="mailto:hello@digitaldarling.app" style="color:var(--crimson);">hello@digitaldarling.app</a>.
+      We are operated by <strong style="color:var(--text);">Yuvneer ProCommerce LLP</strong>, registered in India.
+    </p>
+  </div>
+
+  <!-- Footer links -->
+  <div class="flex items-center justify-center gap-5 pt-2">
+    <a href="/privacy" hx-get="/privacy" hx-target="#page" hx-push-url="true"
+       class="text-xs no-underline" style="color:var(--crimson);">Privacy Policy</a>
+    <span style="color:var(--border);">·</span>
+    <a href="/terms" hx-get="/terms" hx-target="#page" hx-push-url="true"
+       class="text-xs no-underline" style="color:var(--crimson);">Terms &amp; Conditions</a>
+  </div>
+
+</div>
+{% endblock %}

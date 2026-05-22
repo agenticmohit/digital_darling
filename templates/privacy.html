@@ -1,0 +1,133 @@
+{% extends base_template %}
+
+{% block content %}
+<div class="pb-10 pt-2">
+
+  <div class="space-y-1 mb-6">
+    <p class="text-[10px] font-bold tracking-widest uppercase" style="color:var(--crimson);">Legal</p>
+    <h1 class="text-xl font-semibold" style="color:var(--text); letter-spacing:-0.3px;">Privacy Policy</h1>
+    <p class="text-xs" style="color:var(--muted);">Last updated: June 2025</p>
+  </div>
+
+  <!-- Who we are -->
+  <div class="card space-y-2 mb-3">
+    <p class="text-xs font-bold tracking-widest uppercase" style="color:var(--muted);">Who we are</p>
+    <p class="text-xs leading-relaxed" style="color:var(--sub);">
+      DigitalDarling is a product of <strong style="color:var(--text);">Yuvneer ProCommerce LLP</strong>, a company registered in India.
+      We operate the website and service available at digitaldarling.app ("Service"). This policy explains what data
+      we collect, why, and how it is protected.
+    </p>
+    <p class="text-xs leading-relaxed" style="color:var(--sub);">
+      Questions? Reach us at <a href="mailto:hello@digitaldarling.app" style="color:var(--crimson);">hello@digitaldarling.app</a>
+    </p>
+  </div>
+
+  <!-- What we collect -->
+  <div class="card space-y-3 mb-3">
+    <p class="text-xs font-bold tracking-widest uppercase" style="color:var(--muted);">Data we collect</p>
+
+    <div class="space-y-2.5">
+      <div class="flex items-start gap-3">
+        <span class="dot-accent mt-1.5"></span>
+        <div>
+          <p class="text-xs font-semibold" style="color:var(--text);">Account data</p>
+          <p class="text-xs leading-relaxed" style="color:var(--sub);">Your email address, collected when you sign up or use magic link login. Used to identify your account and send transactional emails only.</p>
+        </div>
+      </div>
+
+      <div class="flex items-start gap-3" style="border-top:1px solid var(--border); padding-top:10px;">
+        <span class="dot-accent mt-1.5"></span>
+        <div>
+          <p class="text-xs font-semibold" style="color:var(--text);">Chat content</p>
+          <p class="text-xs leading-relaxed" style="color:var(--sub);">Text you paste or screenshots you upload for analysis. This content is sent to OpenAI's API for processing and stored in your personal history. We do not read, share, or use your conversations for training.</p>
+        </div>
+      </div>
+
+      <div class="flex items-start gap-3" style="border-top:1px solid var(--border); padding-top:10px;">
+        <span class="dot-accent mt-1.5"></span>
+        <div>
+          <p class="text-xs font-semibold" style="color:var(--text);">Usage data</p>
+          <p class="text-xs leading-relaxed" style="color:var(--sub);">A daily read counter (resets at midnight) to enforce plan limits. No browsing behaviour, device fingerprinting, or analytics tracking.</p>
+        </div>
+      </div>
+
+      <div class="flex items-start gap-3" style="border-top:1px solid var(--border); padding-top:10px;">
+        <span class="dot-accent mt-1.5"></span>
+        <div>
+          <p class="text-xs font-semibold" style="color:var(--text);">Payment data</p>
+          <p class="text-xs leading-relaxed" style="color:var(--sub);">Payments are processed by Razorpay. We receive your email and plan status — your card number or UPI details never touch our servers.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Third parties -->
+  <div class="card space-y-3 mb-3">
+    <p class="text-xs font-bold tracking-widest uppercase" style="color:var(--muted);">Third-party services</p>
+    <div class="space-y-2">
+      <div class="flex items-center justify-between py-2" style="border-bottom:1px solid var(--border);">
+        <span class="text-xs font-semibold" style="color:var(--text);">OpenAI</span>
+        <span class="text-xs" style="color:var(--sub);">Chat analysis &amp; vision</span>
+      </div>
+      <div class="flex items-center justify-between py-2" style="border-bottom:1px solid var(--border);">
+        <span class="text-xs font-semibold" style="color:var(--text);">Supabase</span>
+        <span class="text-xs" style="color:var(--sub);">Authentication &amp; database</span>
+      </div>
+      <div class="flex items-center justify-between py-2">
+        <span class="text-xs font-semibold" style="color:var(--text);">Razorpay</span>
+        <span class="text-xs" style="color:var(--sub);">Payment processing</span>
+      </div>
+    </div>
+    <p class="text-xs leading-relaxed" style="color:var(--muted);">
+      Each provider operates under their own privacy policy. We select providers who adhere to strong data protection standards.
+    </p>
+  </div>
+
+  <!-- Data retention -->
+  <div class="card space-y-2 mb-3">
+    <p class="text-xs font-bold tracking-widest uppercase" style="color:var(--muted);">Data retention &amp; deletion</p>
+    <p class="text-xs leading-relaxed" style="color:var(--sub);">
+      Your account and history are retained as long as your account is active. To delete your account and all associated data, email us at
+      <a href="mailto:hello@digitaldarling.app" style="color:var(--crimson);">hello@digitaldarling.app</a> and we will process it within 7 business days.
+    </p>
+  </div>
+
+  <!-- Your rights -->
+  <div class="card space-y-2 mb-3">
+    <p class="text-xs font-bold tracking-widest uppercase" style="color:var(--muted);">Your rights</p>
+    <p class="text-xs leading-relaxed" style="color:var(--sub);">
+      Under Indian law (IT Act, 2000) and applicable data protection regulations, you have the right to access,
+      correct, or request deletion of your personal data. Contact us at
+      <a href="mailto:hello@digitaldarling.app" style="color:var(--crimson);">hello@digitaldarling.app</a> to exercise any of these rights.
+    </p>
+  </div>
+
+  <!-- Security -->
+  <div class="card space-y-2 mb-3">
+    <p class="text-xs font-bold tracking-widest uppercase" style="color:var(--muted);">Security</p>
+    <p class="text-xs leading-relaxed" style="color:var(--sub);">
+      Authentication tokens are stored in secure, HTTP-only cookies. Passwords are never stored — we use Supabase Auth
+      which handles hashing and security. All data is transmitted over HTTPS.
+    </p>
+  </div>
+
+  <!-- Governing law -->
+  <div class="card space-y-2 mb-6">
+    <p class="text-xs font-bold tracking-widest uppercase" style="color:var(--muted);">Governing law</p>
+    <p class="text-xs leading-relaxed" style="color:var(--sub);">
+      This policy is governed by the laws of India. Any disputes shall be subject to the jurisdiction of courts in India.
+      Yuvneer ProCommerce LLP is a Limited Liability Partnership registered in India.
+    </p>
+  </div>
+
+  <!-- Footer links -->
+  <div class="flex items-center justify-center gap-5 pt-2">
+    <a href="/terms" hx-get="/terms" hx-target="#page" hx-push-url="true"
+       class="text-xs no-underline" style="color:var(--crimson);">Terms &amp; Conditions</a>
+    <span style="color:var(--border);">·</span>
+    <a href="/refund" hx-get="/refund" hx-target="#page" hx-push-url="true"
+       class="text-xs no-underline" style="color:var(--crimson);">Refund Policy</a>
+  </div>
+
+</div>
+{% endblock %}
